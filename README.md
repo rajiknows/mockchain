@@ -7,6 +7,35 @@
 [![Status](https://img.shields.io/badge/Status-Experimental-red.svg)]()
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](#contributing)
 
+## Table of Contents
+- [Overview](#overview)
+- [Key Features](#key-features)
+  - [Pluggable Consensus Mechanisms](#pluggable-consensus-mechanisms)
+  - [Secure Transactions](#secure-transactions)
+  - [gRPC API Service](#grpc-api-service)
+  - [Block Structure](#block-structure)
+  - [Development Features](#development-features)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Running the Node](#running-the-node)
+  - [Configuration Options](#configuration-options)
+- [Client Interaction](#client-interaction)
+  - [Official Wallet Client: Mockallet](#official-wallet-client-mockallet)
+  - [Using the gRPC API Directly](#using-the-grpc-api-directly)
+    - [Example: Requesting Test Tokens](#example-requesting-test-tokens)
+    - [Example: Submitting a Transaction](#example-submitting-a-transaction)
+- [Architecture](#architecture)
+- [Technical Details](#technical-details)
+  - [Transaction Verification](#transaction-verification)
+  - [Mining Process](#mining-process)
+- [Ecosystem](#ecosystem)
+  - [Core Components](#core-components)
+- [Future Improvements](#future-improvements)
+- [License](#license)
+- [Contributing](#contributing)
+  - [Priority Contribution Areas](#priority-contribution-areas)
+
 ## Overview
 
 MockChain is a modular blockchain implementation written in Rust that demonstrates fundamental blockchain concepts while providing a practical framework for experimentation. This project features a pluggable consensus mechanism, transaction management, and a gRPC API for external interaction.
