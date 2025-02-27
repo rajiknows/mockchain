@@ -82,7 +82,7 @@ Each block contains:
 
 1. Clone the repository:
    ```
-   git clone https://github.com/yourusername/mockchain.git
+   git clone https://github.com/0xsourav/mockchain.git
    cd mockchain
    ```
 
