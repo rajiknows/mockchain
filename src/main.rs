@@ -44,7 +44,7 @@ impl ConsensusType {
     fn create_consensus(&self) -> Box<dyn Consensus> {
         match self {
             ConsensusType::ProofOfWork { difficulty } => Box::new(ProofOfWork::new(*difficulty)),
-            ConsensusType::ProofOfStake { min_stake } => Box::new(ProofOfStake::new(*min_stake)),
+            ConsensusType::ProofOfStake { min_stake } => todo!()
         }
     }
 }
