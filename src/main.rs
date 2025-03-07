@@ -7,7 +7,7 @@ use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
 use tokio::sync::Mutex;
 use tonic::{transport::Server, Request, Response, Status};
-use log::{info, warn, error, debug};
+use log::{info, warn};
 
 pub mod blockchain {
     tonic::include_proto!("blockchain");
@@ -44,7 +44,7 @@ impl ConsensusType {
     fn create_consensus(&self) -> Box<dyn Consensus> {
         match self {
             ConsensusType::ProofOfWork { difficulty } => Box::new(ProofOfWork::new(*difficulty)),
-            ConsensusType::ProofOfStake { min_stake } => todo!()
+            ConsensusType::ProofOfStake { min_stake: _ } => todo!()
         }
     }
 }
@@ -403,7 +403,7 @@ impl BlockchainService for BlockchainServer {
             }))
         } else {
             Ok(Response::new(FaucetResponse {
-                success: success,
+                success,
                 amount: if success { faucet_amount } else { 0 },
                 message: if success { 
                     "Faucet funds queued for next block".to_string()
