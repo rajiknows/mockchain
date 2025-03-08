@@ -36,15 +36,15 @@ pub trait Consensus: Send + Sync {
 // Available consensus types
 #[derive(Debug)]
 pub enum ConsensusType {
-    ProofOfWork { difficulty: usize },
-    ProofOfStake { min_stake: u64 },
+    ProofOfWorkType { difficulty: usize },
+    ProofOfStakeType { min_stake: u64 },
 }
 
 impl ConsensusType {
     fn create_consensus(&self) -> Box<dyn Consensus> {
         match self {
-            ConsensusType::ProofOfWork { difficulty } => Box::new(ProofOfWork::new(*difficulty)),
-            ConsensusType::ProofOfStake { min_stake: _ } => todo!()
+            ConsensusType::ProofOfWorkType { difficulty } => Box::new(ProofOfWork::new(*difficulty)),
+            ConsensusType::ProofOfStakeType { min_stake: _ } => todo!()
         }
     }
 }
@@ -422,7 +422,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .init();
 
     // Choose consensus mechanism (could come from args/config)
-    let consensus_type = ConsensusType::ProofOfWork { difficulty: 3 };
+    let consensus_type = ConsensusType::ProofOfWorkType { difficulty: 3 };
     let consensus = consensus_type.create_consensus();
     
     info!("Blockchain node starting...");
