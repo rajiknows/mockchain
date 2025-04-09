@@ -17,9 +17,8 @@ const FAUCET_MOCKCHAIN_ADDRESS: &str = "FAUCET_MOCKCHAIN_ADDRESS";
 
 use blockchain::blockchain_service_server::{BlockchainService, BlockchainServiceServer};
 use blockchain::{
-    BalanceRequest, BalanceResponse, FaucetRequest, FaucetResponse, GetStateRequest,
-    HistoryRequest, HistoryResponse, StateResponse, Transaction as ProtoTransaction,
-    TransactionResponse,
+    BalanceRequest, BalanceResponse, FaucetRequest, FaucetResponse, HistoryRequest,
+    HistoryResponse, StateResponse, Transaction as ProtoTransaction, TransactionResponse,
 };
 
 // Consensus trait defines how blocks are produced and validated
