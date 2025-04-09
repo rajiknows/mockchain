@@ -18,8 +18,8 @@ const FAUCET_MOCKCHAIN_ADDRESS: &str = "FAUCET_MOCKCHAIN_ADDRESS";
 use blockchain::blockchain_service_server::{BlockchainService, BlockchainServiceServer};
 use blockchain::{
     BalanceRequest, BalanceResponse, FaucetRequest, FaucetResponse, GetStateRequest,
-    GetTransactionRequest, GetTransactionResponse, HistoryRequest, HistoryResponse, StateResponse,
-    Transaction as ProtoTransaction, TransactionResponse,
+    HistoryRequest, HistoryResponse, StateResponse, Transaction as ProtoTransaction,
+    TransactionResponse,
 };
 
 // Consensus trait defines how blocks are produced and validated
@@ -104,6 +104,49 @@ impl Consensus for ProofOfWork {
             let (_, miner_key) = secp.generate_keypair(&mut rand::thread_rng());
             info!(
                 "PoW mining with address: {}",
+                hex::encode(miner_key.serialize())
+            );
+
+            loop {
+                {
+                    let mut chain = blockchain.lock().await;
+                    if chain.transaction_pool.len() > 10 {
+                        if let Some(block) = chain.mine_pending_transactions(&miner_key) {
+                            info!("Mined block {} with hash {}", block.index, block.hash);
+                        }
+                    }
+                }
+                tokio::time::sleep(tokio::time::Duration::from_secs(10)).await;
+            }
+        });
+    }
+}
+
+pub struct ProofOfStake {
+    min_stake: u64,
+}
+
+impl Consensus for ProofOfStake {
+    fn name(&self) -> &str {
+        "Proof of Stake"
+    }
+
+    fn generate_block(
+        &self,
+        index: u64,
+        transactions: Vec<Transaction>,
+        previous_hash: String,
+    ) -> Block {
+    }
+
+    fn validate_block(&self, block: &Block, previous_hash: &str) -> bool {}
+
+    fn start(&self, blockchain: Arc<Mutex<Blockchain>>) {
+        tokio::spawn(async move {
+            let secp = Secp256k1::new();
+            let (_, miner_key) = secp.generate_keypair(&mut rand::thread_rng());
+            info!(
+                "PoS mining with address: {}",
                 hex::encode(miner_key.serialize())
             );
 
@@ -456,39 +499,18 @@ impl BlockchainService for BlockchainServer {
         let address = request.into_inner().address;
         let chain = self.blockchain.lock().await;
         let history = chain.get_history(&address);
-        // TODO: do we need to return an error if the address has no history?
         Ok(Response::new(HistoryResponse {
             transactions: history.into_iter().map(Into::into).collect(),
         }))
     }
 
-    async fn get_state(
-        &self,
-        request: Request<GetStateRequest>,
-    ) -> Result<Response<StateResponse>, Status> {
+    async fn get_state(&self) -> Result<Response<StateResponse>, Status> {
         let chain = self.blockchain.lock().await;
         let state = chain.get_state();
         Ok(Response::new(StateResponse {
             blocks: state.into_iter().map(Into::into).collect(),
         }))
     }
-
-    // TODO: implement this
-
-    // async fn get_transaction(
-    //     &self,
-    //     request: Request<GetTransactionRequest>,
-    // ) -> Result<Response<GetTransactionResponse>, Status> {
-    //     let hash = request.into_inner().blockhash;
-    //     let chain = self.blockchain.lock().await;
-    //     if let Some(tx) = chain.get_transaction_from_hash(&hash) {
-    //         Ok(Response::new(GetTransactionResponse {
-    //             transaction: Some(tx.into()),
-    //         }))
-    //     } else {
-    //         Err(Status::not_found("Transaction not found"))
-    //     }
-    // }
 
     async fn get_block(
         &self,

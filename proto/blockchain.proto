@@ -17,14 +17,10 @@ service BlockchainService {
   // gets the complete state of the blockchain
   rpc GetState(GetStateRequest) returns (StateResponse);
 
-  // gets the transaction by hash
-  // rpc GetTransaction(GetTransactionRequest) returns (GetTransactionResponse);
-
-  // get the block by index
+    // get the block by index
   rpc GetBlock(GetBlockRequest) returns (GetBlockResponse);
 }
 
-// can't we just not have any req parameters and just return the state?
 message GetStateRequest {
 string address=1;
 }
@@ -37,13 +33,6 @@ message GetBlockResponse {
   Block block = 1;
   }
 
-message GetTransactionRequest {
-  string blockhash = 1; // hash of the block
-}
-
-message GetTransactionResponse {
-  Transaction transaction = 1;
-}
 
 message StateResponse {
     repeated Block blocks = 1;
