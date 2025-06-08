@@ -10,7 +10,7 @@ use tonic::{Request, Response, Status};
 use crate::{
     blockchain::{
         blockchain_service_server::BlockchainService, BalanceRequest, BalanceResponse,
-        FaucetRequest, FaucetResponse, Transaction as ProtoTransaction, TransactionResponse,
+        FaucetRequest, FaucetResponse, RpcTransaction, TransactionResponse,
     },
     transaction::Transaction,
     Blockchain, FAUCET_MOCKCHAIN_ADDRESS,
@@ -32,7 +32,7 @@ impl BlockchainServer {
 impl BlockchainService for BlockchainServer {
     async fn submit_transaction(
         &self,
-        request: Request<ProtoTransaction>,
+        request: Request<RpcTransaction>,
     ) -> Result<Response<TransactionResponse>, Status> {
         let tx = request.into_inner();
 

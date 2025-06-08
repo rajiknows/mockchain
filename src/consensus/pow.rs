@@ -3,7 +3,7 @@ use std::sync::{Arc, Mutex};
 use log::info;
 use secp256k1::Secp256k1;
 
-use crate::{block::Block, blockchain::Transaction, Blockchain};
+use crate::{block::Block, transaction::Transaction, Blockchain};
 
 use super::Consensus;
 

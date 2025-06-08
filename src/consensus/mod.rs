@@ -4,6 +4,7 @@ use pow::ProofOfWork;
 
 use crate::{block::Block, transaction::Transaction, Blockchain};
 
+mod pos;
 mod pow;
 // Consensus trait defines how blocks are produced and validated
 pub trait Consensus: Send + Sync {

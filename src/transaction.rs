@@ -1,7 +1,7 @@
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use log::warn;
-use secp256k1::{ffi::PublicKey, Secp256k1};
+use secp256k1::{PublicKey, Secp256k1};
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 
